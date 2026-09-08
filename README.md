@@ -44,7 +44,7 @@ A web application for reporting and browsing lost and found items on campus. Use
 git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git
 cd SIT725-Group-88-Campus-Lost-and-Found
 ```
-
+copy .env file (provided in the ontrack submission)
 #### Step 2: Start Docker Containers
 
 ```bash
