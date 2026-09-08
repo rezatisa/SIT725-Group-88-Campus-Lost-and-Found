@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationHeading = document.getElementById('location-heading');
     const foundCollectionSection = document.getElementById('section-found-collection');
 
-    // Mode function to change between Lost and Found tabs
     function setReportMode(mode) {
         if (mode === 'lost') {
             typeInput.value = 'lost';
@@ -37,18 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
     btnLost.addEventListener('click', () => setReportMode('lost'));
     btnFound.addEventListener('click', () => setReportMode('found'));
 
-    // Set default today's date in date picker
     const dateInput = document.getElementById('item-date');
     if (dateInput && !dateInput.value) {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
 
-    // function to execute on report submission
     if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Validate form
             if (typeof validateReportForm === 'function') {
                 const validation = validateReportForm(form);
                 if (!validation.isValid) {
@@ -57,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Collect all form fields
             const reportData = {
                 type: typeInput.value,
                 title: document.getElementById('item-title').value.trim(),
@@ -71,15 +66,40 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             console.log('Report submission data:', reportData);
+            console.log('About to fetch...');
+            fetch('/api/items', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reportData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to submit report');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Report created successfully:', data);
+                    alert('✓ Report submitted successfully!\n\nItem ID: ' + data.item._id);
 
-            // API CALL SHOULD BE HERE
-            alert('Report submitted successfully!');
-            form.reset();
+                    form.reset();
 
-            // Re-initialize default date after reset
-            if (dateInput) {
-                dateInput.value = new Date().toISOString().split('T')[0];
-            }
+                    if (dateInput) {
+                        dateInput.value = new Date().toISOString().split('T')[0];
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'browse.html';
+                    }, 1500);
+                })
+                .catch(error => {
+                    console.error('Error submitting report:', error);
+                    alert('✗ Error submitting report:\n' + error.message);
+                });
         });
     }
 });

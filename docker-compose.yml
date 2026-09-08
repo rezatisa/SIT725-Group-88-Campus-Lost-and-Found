@@ -1,42 +1,22 @@
-version: '3.8'
-
 services:
-  # MongoDB service
   mongodb:
     image: mongo:7.0
-    container_name: sit725-mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password123
-      MONGO_INITDB_DATABASE: sit725-group-88
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
-  # Node.js application service
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: sit725-app
+    build: .
     environment:
-      NODE_ENV: production
-      PORT: 3000
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/sit725-group-88?authSource=admin
     ports:
       - "3000:3000"
     depends_on:
-      mongodb:
-        condition: service_healthy
-    volumes:
-      - .:/app
-      - /app/node_modules
+      - mongodb
 
 volumes:
   mongodb_data:

@@ -7,54 +7,20 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-// Parse JSON request bodies
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Serve static frontend files
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Temporary in-memory storage
-const items = [];
+// Import routes
+const itemRoutes = require("./routes/item.routes");
 
-// GET all items
-app.get("/api/items", (req, res) => {
-  res.json(items);
-});
+// Use routes
+app.use("/api/items", itemRoutes);
 
-// POST a new item
-app.post("/api/items", (req, res) => {
-  const { type, title, category, date, location, description } = req.body;
-
-  // Required field validation
-  if (!type || !title || !category || !date || !location || !description) {
-    return res.status(400).json({
-      message: "All required fields must be provided.",
-    });
-  }
-
-  const newItem = {
-    id: items.length + 1,
-    type,
-    title,
-    category,
-    date,
-    location,
-    description,
-  };
-
-  items.push(newItem);
-
-  return res.status(201).json({
-    message: "Report created successfully.",
-    item: newItem,
-  });
-});
-
-// Export (used by tests via Supertest)
-
-module.exports = { app, items };
-
+// Student endpoint
 app.get("/api/student", (req, res) => {
   res.json({
     name: "Reza Tisa Adi Pratama",
@@ -62,26 +28,32 @@ app.get("/api/student", (req, res) => {
   });
 });
 
-// Start server
+// Root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "browse.html"));
+});
+
+// Export
+module.exports = { app };
+
+// Connect & Start
 if (require.main === module) {
   const MONGODB_URI = process.env.MONGODB_URI;
 
   if (!MONGODB_URI) {
-    console.error("MONGODB_URI is not defined.");
+    console.error("ERROR: MONGODB_URI not defined");
     process.exit(1);
   }
 
-  mongoose
-    .connect(MONGODB_URI)
+  mongoose.connect(MONGODB_URI)
     .then(() => {
-      console.log("Connected to MongoDB");
-
+      console.log("✓ Connected to MongoDB");
       app.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}`);
+        console.log(`✓ Server running at http://localhost:${PORT}`);
       });
     })
     .catch((error) => {
-      console.error("MongoDB connection error:", error.message);
+      console.error("✗ MongoDB error:", error.message);
       process.exit(1);
     });
 }
