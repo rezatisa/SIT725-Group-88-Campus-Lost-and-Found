@@ -80,16 +80,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found.git"
+    "url": "git+https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found/issues"
+    "url": "https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found/issues"
   },
-  "homepage": "https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found#readme",
+  "homepage": "https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found#readme",
   "devDependencies": {
     "chai": "^6.2.2",
     "mocha": "^12.0.0",

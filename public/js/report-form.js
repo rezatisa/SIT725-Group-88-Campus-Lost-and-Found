@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(data => {
                     console.log('Report created successfully:', data);
-                    alert('✓ Report submitted successfully!\n\nItem ID: ' + data.item._id);
+                    alert('✓ Report submitted successfully!');
 
                     form.reset();
 
