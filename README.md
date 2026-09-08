@@ -165,30 +165,6 @@ project/
 
 ## API Endpoints
 
-### GET /api/items
-Retrieve all lost and found items
-
-```bash
-curl http://localhost:3000/api/items
-```
-
-**Response (200 OK):**
-```json
-[
-  {
-    "id": "507f1f77bcf86cd799439011",
-    "type": "found",
-    "title": "Blue Backpack",
-    "category": "Bags & Backpacks",
-    "description": "Blue backpack found in library",
-    "date": "2024-09-08T00:00:00.000Z",
-    "location": "Melbourne Burwood - A Building",
-    "status": "active",
-    "photos": []
-  }
-]
-```
-
 ---
 
 ### POST /api/items
@@ -228,7 +204,31 @@ curl -X POST http://localhost:3000/api/items \
   }
 }
 ```
+---
+### GET /api/items
+Retrieve all lost and found items
 
+```bash
+curl http://localhost:3000/api/items
+```
+
+**Response (200 OK):**
+```json
+[
+  {
+  "id": "507f1f77bcf86cd799439011",
+  "_id": "507f1f77bcf86cd799439011",
+  "type": "found",
+  "title": "Red Wallet",
+  "category": "Student Cards, Wallets, IDs",
+  "description": "Red wallet with student ID",
+  "date": "2024-09-08T00:00:00.000Z",
+  "location": "Melbourne Burwood - B Building, B312",
+  "status": "active",
+  "photos": []
+  }
+]
+```
 ---
 
 ### GET /api/student
