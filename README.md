@@ -240,15 +240,12 @@ Response:
 
 ## Environment Variables
 
-**.env file:**
-```
-MONGODB_URI=mongodb://admin:password123@mongodb:27017/sit725-group-88?authSource=admin
-```
+The `.env` file is required to run the application and is provided in the OnTrack submission. 
 
-For local development (without Docker):
-```
-MONGODB_URI=mongodb://localhost:27017/sit725-group-88
-```
+**Steps:**
+1. Download the `.env` (file provided in the OnTrack submission)
+2. Place it in the project root directory
+3. Run `docker-compose up`
 
 ---
 
