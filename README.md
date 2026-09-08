@@ -276,35 +276,6 @@ docker-compose logs mongodb
 # Stop and remove everything
 docker-compose down -v
 ```
-
----
-
-## Troubleshooting
-
-### MongoDB connection error
-**Error:** `MongoDB error: getaddrinfo ENOTFOUND mongodb`
-
-**Solution:** Ensure `.env` has correct MongoDB URI for Docker:
-```
-MONGODB_URI=mongodb://admin:password123@mongodb:27017/sit725-group-88?authSource=admin
-```
-
-### Port already in use
-**Error:** `Bind for 0.0.0.0:3000 failed`
-
-**Solution:**
-```bash
-docker-compose down
-docker-compose up
-```
-
-### Fresh start
-```bash
-docker-compose down -v
-docker-compose build --no-cache
-docker-compose up
-```
-
 ---
 
 ## Features
