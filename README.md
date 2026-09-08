@@ -11,6 +11,9 @@
 
 A web application for reporting and browsing lost and found items on campus. Users can report lost or found items and browse a centralized database of all reports.
 
+Note: This application has core functionality working (create report, display reports). 
+Some features are still in development (search, photo upload, authentication).
+
 **Original Group Repository:** https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found 
 
 **Individual HD Submission:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
@@ -45,6 +48,7 @@ git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git
 cd SIT725-Group-88-Campus-Lost-and-Found
 ```
 copy .env file (provided in the ontrack submission)
+
 #### Step 2: Start Docker Containers
 
 ```bash
