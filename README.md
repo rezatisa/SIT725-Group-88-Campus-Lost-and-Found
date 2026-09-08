@@ -113,8 +113,6 @@ Should return:
 #### MongoDB Container
 - **Image:** mongo:7.0
 - **Port:** 27017
-- **Username:** admin
-- **Password:** password123
 - **Database:** sit725-group-88
 - **Persistence:** Data saved in `mongodb_data` volume
 
