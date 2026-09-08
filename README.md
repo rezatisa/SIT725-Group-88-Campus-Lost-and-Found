@@ -11,8 +11,12 @@
 
 A web application for reporting and browsing lost and found items on campus. Users can report lost or found items and browse a centralized database of all reports.
 
-**Original Group Repository:** https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found  
+**Original Group Repository:** https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found 
+
 **Individual HD Submission:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
+
+**Readme :** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found#readme
+
 ---
 
 ## Technology Stack
