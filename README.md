@@ -47,7 +47,8 @@ cd SIT725-Group-88-Campus-Lost-and-Found
 ```
 
 #### Step 2: Clone Repository
-**Copy .env file:** Download from the OnTrack submission and place in the project root directory.
+**Download and Copy .env file:** 
+Download link provided in the OnTrack submission and place in the project root directory.
 
 #### Step 3: Start Docker Containers
 
