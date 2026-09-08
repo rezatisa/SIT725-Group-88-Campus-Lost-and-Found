@@ -47,7 +47,7 @@ Some features are still in development (search, photo upload, authentication).
 git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git
 cd SIT725-Group-88-Campus-Lost-and-Found
 ```
-copy .env file (provided in the ontrack submission)
+**copy .env file (download link provided in the ontrack submission)**
 
 #### Step 2: Start Docker Containers
 
