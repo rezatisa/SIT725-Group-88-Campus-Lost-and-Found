@@ -25,7 +25,7 @@ Some features are still in development (search, photo upload, authentication).
 ## Technology Stack
 
 - **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Node.js (v18), Express.js
+- **Backend:** Node.js (v20), Express.js
 - **Database:** MongoDB (v7.0)
 - **Containerization:** Docker & Docker Compose
 - **Architecture:** MVC (Model-View-Controller)
