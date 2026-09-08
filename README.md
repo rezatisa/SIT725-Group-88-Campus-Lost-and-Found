@@ -1,6 +1,6 @@
 # Campus Lost & Found - Docker Deployment
 
-## Individual HD Submission by Reza Tisa Adi Pratama
+## Submission by Reza Tisa Adi Pratama
 
 **Student ID:** 226169199  
 **Assignment:** 8.2HD Docker: End-to-End Application Deployment
@@ -188,7 +188,7 @@ curl -X POST http://localhost:3000/api/items \
   -d '{
     "type": "found",
     "title": "Red Wallet",
-    "category": "Cards & Wallets",
+    "category": "Student Cards, Wallets, IDs",
     "date": "2026-09-08",
     "description": "Red wallet with student ID",
     "campus": "Melbourne Burwood",
