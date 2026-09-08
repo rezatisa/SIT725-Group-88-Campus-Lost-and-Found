@@ -82,7 +82,7 @@ Open your browser:
 
 ### 2. View Reports
 
-1. Click **"Main"** or refresh http://localhost:3000
+1. Click **"Main"** or refresh http://localhost:3000/browse.html
 2. Your report should appear as a card on the browse page
 
 ### 3. Verify API Endpoints
@@ -127,6 +127,8 @@ Should return:
 
 ```
 project/
+├── .gitignore                # Files to exclude from Git
+├── README.md                 # Project documentation
 ├── Dockerfile                # Application container config
 ├── docker-compose.yml        # Service orchestration
 ├── .dockerignore             # Exclude files from build
@@ -138,18 +140,23 @@ project/
 ├── routes/
 │   └── item.routes.js        # API endpoints
 ├── models/                   # Database schemas
-│   ├── lostItem.model.js
-│   ├── foundItem.model.js
-│   └── user.model.js
+│   ├── lostItem.model.js     # Lost item schema
+│   ├── foundItem.model.js    # Found item schema
+│   └── user.model.js         # User schema (future)
 │
-├── public/                   # Frontend
-│   ├── index.html
-│   ├── report.html
-│   ├── browse.html
-│   ├── css/
-│   └── js/
+├── public/                   # Frontend (Views)
+│   ├── index.html            # Home page
+│   ├── report.html           # Report creation page
+│   ├── browse.html           # Browse items page
+│   ├── css/                  # Stylesheets
+│   │   ├── style.css         # Main styles
+│   │   ├── browse.css        # Browse page styles
+│   │   └── report.css        # Report page styles
+│   └── js/                   # JavaScript files
+│       ├── main.js           # Utility functions
 │       ├── report-form.js    # Form submission
-│       └── browse.js         # Display items
+│       ├── browse.js         # Display items
+│       └── report-validation.js  # Form validation
 │
 └── .env                      # Environment variables
 ```
