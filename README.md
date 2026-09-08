@@ -18,8 +18,6 @@ Some features are still in development (search, photo upload, authentication).
 
 **Individual HD Submission:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
 
-**Readme :** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found#readme
-
 ---
 
 ## Technology Stack
@@ -47,7 +45,8 @@ Some features are still in development (search, photo upload, authentication).
 git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git
 cd SIT725-Group-88-Campus-Lost-and-Found
 ```
-**copy .env file (download link provided in the ontrack submission)**
+
+**Copy .env file:** Download from the OnTrack submission and place in the project root directory.
 
 #### Step 2: Start Docker Containers
 
@@ -164,7 +163,7 @@ Retrieve all lost and found items
 curl http://localhost:3000/api/items
 ```
 
-Response:
+**Response (200 OK):**
 ```json
 [
   {
@@ -181,8 +180,13 @@ Response:
 ]
 ```
 
+---
+
 ### POST /api/items
 Create a new report
+
+**Required Fields:** type, title, category, date, description, campus, building  
+**Optional Fields:** room, handoverMethod
 
 ```bash
 curl -X POST http://localhost:3000/api/items \
@@ -191,7 +195,7 @@ curl -X POST http://localhost:3000/api/items \
     "type": "found",
     "title": "Red Wallet",
     "category": "Student Cards, Wallets, IDs",
-    "date": "2026-09-08",
+    "date": "2024-09-08",
     "description": "Red wallet with student ID",
     "campus": "Melbourne Burwood",
     "building": "B Building",
@@ -200,6 +204,24 @@ curl -X POST http://localhost:3000/api/items \
   }'
 ```
 
+**Response (201 Created):**
+```json
+{
+  "message": "Report created successfully!",
+  "item": {
+    "_id": "507f1f77bcf86cd799439011",
+    "type": "found",
+    "title": "Red Wallet",
+    "category": "Student Cards, Wallets, IDs",
+    "date": "2024-09-08T00:00:00.000Z",
+    "location": "Melbourne Burwood - B Building, B312",
+    "status": "active"
+  }
+}
+```
+
+---
+
 ### GET /api/student
 Get student identification (HD submission)
 
@@ -207,7 +229,7 @@ Get student identification (HD submission)
 curl http://localhost:3000/api/student
 ```
 
-Response:
+**Response (200 OK):**
 ```json
 {
   "name": "Reza Tisa Adi Pratama",
@@ -243,7 +265,7 @@ Response:
 The `.env` file is required to run the application and is provided in the OnTrack submission. 
 
 **Steps:**
-1. Download the `.env` (file provided in the OnTrack submission)
+1. Download the `.env` file from the OnTrack submission
 2. Place it in the project root directory
 3. Run `docker-compose up`
 
@@ -276,6 +298,7 @@ docker-compose logs mongodb
 # Stop and remove everything
 docker-compose down -v
 ```
+
 ---
 
 ## Features
@@ -296,7 +319,7 @@ docker-compose down -v
 To clear all data:
 ```bash
 docker-compose down -v
-docker-compose up
+docker-compose up --build
 ```
 
 ### Debugging
@@ -305,7 +328,6 @@ View app console output:
 docker-compose logs app -f
 ```
 
----
 ---
 
 ## References
