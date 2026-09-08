@@ -14,10 +14,10 @@ A web application for reporting and browsing lost and found items on campus. Use
 Note: This application has core functionality working (create report, display reports). 
 Some features are still in development (search, photo upload, authentication).
 
-**Original Group Repository:** https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found 
 
-**Individual HD Submission:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
-
+**Github repository:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
+ 
+**Readme:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found#readme
 ---
 
 ## Technology Stack
@@ -37,7 +37,7 @@ Some features are still in development (search, photo upload, authentication).
 - Docker Desktop installed
 - Docker Compose installed (included with Docker Desktop)
 
-### Quick Start (3 Steps)
+### Quick Start (4 Steps)
 
 #### Step 1: Clone Repository
 
@@ -46,9 +46,10 @@ git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git
 cd SIT725-Group-88-Campus-Lost-and-Found
 ```
 
+#### Step 2: Clone Repository
 **Copy .env file:** Download from the OnTrack submission and place in the project root directory.
 
-#### Step 2: Start Docker Containers
+#### Step 3: Start Docker Containers
 
 ```bash
 docker-compose up --build
@@ -60,7 +61,7 @@ Expected output:
 ✓ Server running at http://localhost:3000
 ```
 
-#### Step 3: Access Application
+#### Step 4: Access Application
 
 Open your browser:
 - **Frontend:** http://localhost:3000
