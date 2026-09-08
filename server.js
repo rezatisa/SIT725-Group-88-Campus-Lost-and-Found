@@ -55,6 +55,13 @@ app.post("/api/items", (req, res) => {
 
 module.exports = { app, items };
 
+app.get("/api/student", (req, res) => {
+  res.json({
+    name: "Reza Tisa Adi Pratama",
+    studentId: "226169199"
+  });
+});
+
 // Start server
 if (require.main === module) {
   const MONGODB_URI = process.env.MONGODB_URI;

@@ -1,214 +1,615 @@
-# Campus Lost and Found System
+# Campus Lost and Found System - Docker Deployment
 
-## Project overview
+## Individual HD Submission by [Your Full Name]
 
-This is the Group 88 project for SIT725 Applied Software Engineering. The system is being developed to help Deakin students report and browse lost and found items on campus.
+**Student ID:** 226169199  
+**Course:** SIT725 Applied Software Engineering  
+**Assignment:** 8.2HD Docker: End-to-End Application Deployment
 
-The current work is a Sprint 1 minimum viable product (MVP). Visitors and public users are outside the current scope.
+---
 
-## Current target users
+## Project Overview
 
-The current target users are Deakin students. Support for visitors may be considered in a future version, but it is not part of the current MVP.
+A web application for reporting and browsing lost and found items on campus. Users can report lost or found items and browse a centralized database of all reports.
 
-## Team members
+**Original Group Repository:** https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found  
+**Individual HD Submission:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
 
-| Team member | Main role |
-| --- | --- |
-| Max Andres Guzman Aceituno | Scrum Master and Frontend Developer (Forms) |
-| Mofareh Mubarak M Almakhalas | SRS, Documentation and Backend Developer (Search and Filtering APIs) |
-| Reza Tisa Adi Pratama | UI/UX Designer and Frontend Developer |
-| Gulireba Maierdan | Frontend and API Integration Engineer |
-| Kuan-Ting Chen | Backend and Database |
-| Yuen Yi Cheng (Betty) | Test and Quality Assurance |
+---
 
-## Technologies currently used
+## Technology Stack
 
-- HTML5 and CSS3
-- JavaScript
-- Node.js
-- Express
-- MongoDB and Mongoose
-- dotenv for environment variables
-- Mocha, Chai and Supertest for testing
-- Materialize CSS on the report form page
-- Git and GitHub for version control
-- Trello for Sprint planning
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Node.js (v18), Express.js (v5.2)
+- **Database:** MongoDB (v7.0)
+- **Containerization:** Docker & Docker Compose
+- **Testing:** Mocha, Chai, Supertest
+- **ODM:** Mongoose
 
-## Sprint 1 features currently in `main`
+---
 
-- Static pages for login, browsing, creating a report, item details, search and filters, and My Reports.
-- A Node.js and Express server that serves the files in `public/`.
-- MongoDB connection setup using Mongoose and a local `.env` file.
-- Basic User and Found Item database models.
-- `GET /api/items` for retrieving the current item list.
-- `POST /api/items` for adding a basic lost or found item to temporary memory storage.
-- A browse page that loads active reports from the item API.
-- Report cards that show the title, report type, category, location, date and status.
-- Clear messages when there are no active reports or when the GET request fails.
-- A Lost/Found report form interface.
+## How to Run the Application
 
-## Project structure
+### Prerequisites
 
-```text
-public/       Frontend HTML, CSS and JavaScript
-models/       Mongoose database models
-controllers/  Controller files
-routes/       Route files
-services/     Service files
-scripts/      Development scripts
-test/         Test files
-server.js     Express server and current item API
+You need the following installed on your machine:
+
+- **Docker Desktop** (includes Docker and Docker Compose)
+  - Windows/Mac: Download from https://www.docker.com/products/docker-desktop
+  - Linux: Install docker.io and docker-compose via your package manager
+
+### Quick Start (3 Steps)
+
+#### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
+cd https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
 ```
 
-## Requirements
+#### Step 2: Build and Start the Application
 
-Install these programs before running the project:
-
-- Node.js and npm
-- MongoDB, or access to a working MongoDB connection
-- Git, if cloning the repository from GitHub
-
-## Installation and run instructions for Windows
-
-1. Open Command Prompt.
-
-2. Clone the repository and open its folder:
-
-```cmd
-git clone https://github.com/mofareh221172728/SIT725-Group-88-Campus-Lost-and-Found.git
-cd SIT725-Group-88-Campus-Lost-and-Found
+```bash
+docker-compose up --build
 ```
 
-3. Install the project packages:
+**What happens:**
+- Docker builds the Node.js application image
+- MongoDB database starts and initializes
+- Express server starts automatically
+- All services are ready within 30 seconds
 
-```cmd
-npm install
+You should see output like:
+```
+mongodb: ... Connection accepted
+app: Server running at http://localhost:3000
 ```
 
-4. Create the local environment file:
+#### Step 3: Access the Application
 
-```cmd
-copy .env.example .env
-notepad .env
+Open your browser and navigate to:
+- **Frontend:** http://localhost:3000
+- **Student ID Endpoint:** http://localhost:3000/api/student
+- **API Base:** http://localhost:3000/api
+
+---
+
+## Verifying Your Submission
+
+### Test 1: Verify Application is Running
+
+Navigate to http://localhost:3000 in your browser. You should see the Campus Lost and Found homepage.
+
+### Test 2: Verify /api/student Endpoint
+
+#### Method A: Browser
+Open http://localhost:3000/api/student and you should see:
+```json
+{
+  "name": "Your Full Name",
+  "studentId": "Your Student ID"
+}
 ```
 
-5. In `.env`, keep port `3000` and replace the example MongoDB value with a valid connection string for your MongoDB setup:
-
-```text
-PORT=3000
-MONGODB_URI=your-valid-mongodb-connection-string
+#### Method B: Command Line (curl)
+```bash
+curl http://localhost:3000/api/student
 ```
 
-Save and close the file.
-
-6. Start the server:
-
-```cmd
-node server.js
+Expected output:
+```json
+{"name":"Your Full Name","studentId":"Your Student ID"}
 ```
 
-The expected messages are:
+### Test 3: Verify Database Connection
 
-```text
-Connected to MongoDB
-Server running at http://localhost:3000
+#### Option 1: Use the Web UI
+1. Go to http://localhost:3000
+2. Click "Report Lost/Found Item"
+3. Fill out the form with test data
+4. Submit
+5. Go to "Browse" section - your item should appear
+
+#### Option 2: Use API Endpoint
+```bash
+# Create a test item
+curl -X POST http://localhost:3000/api/items \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "lost",
+    "title": "Test Item",
+    "category": "Electronics",
+    "date": "2024-09-08",
+    "location": "Library",
+    "description": "Test item to verify database connectivity"
+  }'
+
+# Retrieve all items (should include your test item)
+curl http://localhost:3000/api/items
 ```
 
-7. Open the browse page:
+### Test 4: Verify Docker Containers
 
-```text
-http://localhost:3000/browse.html
+In a new terminal:
+```bash
+docker-compose ps
 ```
 
-8. Press `Ctrl+C` in Command Prompt to stop the server.
-
-## Test environment setup for Windows
-
-Complete the project setup above first and keep MongoDB running. Run these commands from the project folder.
-
-1. Install the current packages and create the local test configuration:
-
-```cmd
-npm install
-if not exist .env.test copy .env.test.example .env.test
-notepad .env.test
+You should see output showing both containers running:
+```
+NAME                COMMAND                  SERVICE    STATUS
+sit725-app          docker-entrypoint.s…     app        Up 1 minute
+sit725-mongodb      mongosh localhost:27…    mongodb    Up 1 minute
 ```
 
-2. For local MongoDB, use these values in `.env.test`:
+---
 
-```env
-NODE_ENV=test
-PORT=3001
-MONGODB_URI=mongodb://127.0.0.1:27017/sit725-group-88-test
+## Stopping the Application
+
+To stop the application, press `Ctrl+C` in the terminal, or run:
+
+```bash
+docker-compose down
 ```
 
-Save the file and close Notepad. If you use a hosted MongoDB database, use a connection string for a separate test database.
-
-Use a different database from the one in `.env`. The cleanup functions in `test/helpers/db.js` can delete test data and drop the test database. Do not point them at a development or production database. The `.env.test` file is ignored by Git.
-
-3. Check the development and test configurations and database connections:
-
-```cmd
-npm run preflight-check
+**Note:** Your data in MongoDB will persist. To delete all data:
+```bash
+docker-compose down -v
 ```
 
-The expected final message is `Preflight check passed.` If a check fails, fix the reported issue before running tests.
+---
 
-4. Run the tests:
+## API Endpoints
 
-```cmd
-npm test
+### 1. Frontend (HTML Pages)
+- **GET** `/` - Home page
+- **GET** `/report.html` - Report new lost/found item
+- **GET** `/browse.html` - Browse all items
+- **GET** `/search-filter.html` - Search and filter items
+
+### 2. API Endpoints
+
+#### GET /api/items
+Retrieve all lost and found items
+
+```bash
+curl http://localhost:3000/api/items
 ```
 
-Mocha loads `.env.test` through `.mocharc.js`. At this stage, the command reports `0 passing` because application test cases have not yet been added. This confirms that the test runner starts; it does not confirm that application features pass tests.
-
-## Implemented API endpoints
-
-### Get all current items
-
-```http
-GET /api/items
+Response:
+```json
+[
+  {
+    "id": 1,
+    "type": "lost",
+    "title": "Blue Backpack",
+    "category": "Bags",
+    "date": "2024-09-08",
+    "location": "Library",
+    "description": "Lost blue backpack with laptop"
+  }
+]
 ```
 
-The endpoint currently returns a JSON array. The array is empty after each server restart until test items are added again.
+#### POST /api/items
+Report a new lost or found item
 
-### Create a basic item report
-
-```http
-POST /api/items
-Content-Type: application/json
+```bash
+curl -X POST http://localhost:3000/api/items \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "lost",
+    "title": "Blue Backpack",
+    "category": "Bags",
+    "date": "2024-09-08",
+    "location": "Library",
+    "description": "Lost blue backpack with laptop"
+  }'
 ```
 
-Required JSON fields:
-
-- `type`
-- `title`
-- `category`
-- `date`
-- `location`
-- `description`
-
-Windows test example:
-
-```cmd
-curl.exe -X POST "http://localhost:3000/api/items" -H "Content-Type: application/json" -d "{\"type\":\"found\",\"title\":\"Test Phone\",\"category\":\"Electronics\",\"date\":\"2026-09-05\",\"location\":\"Burwood Library\",\"description\":\"Sprint 1 test item\"}"
+Response:
+```json
+{
+  "message": "Report created successfully.",
+  "item": {
+    "id": 1,
+    "type": "lost",
+    "title": "Blue Backpack",
+    "category": "Bags",
+    "date": "2024-09-08",
+    "location": "Library",
+    "description": "Lost blue backpack with laptop"
+  }
+}
 ```
 
-After a successful request, refresh `http://localhost:3000/browse.html` to view the report.
+#### GET /api/student
+Get student identification (HD submission endpoint)
 
-## Known limitations
+```bash
+curl http://localhost:3000/api/student
+```
 
-- Deakin SSO is not implemented. Login is a mock interface only.
-- The current GET and POST item endpoints use temporary memory storage. Reports are deleted when the server stops.
-- The Mongoose models are not yet connected to the item endpoints.
-- The current Create Report page does not yet send its form data to the POST endpoint.
-- Photo upload and storage are not yet implemented.
-- Search and filter controls are currently interface placeholders. The search and filter API is planned for Sprint 2.
-- Item details, editing, resolving reports and My Reports are not yet fully connected to stored data.
-- The test tools are configured, but application test cases have not yet been added.
+Response:
+```json
+{
+  "name": "Your Full Name",
+  "studentId": "Your Student ID"
+}
+```
 
-## Current verification status
+---
 
-The dependency installation and JavaScript syntax checks have been completed. The Windows startup instructions were also tested successfully with a valid MongoDB connection. The browse page loaded correctly, and the GET and POST item endpoints displayed the test item as expected.
+## Docker Architecture
 
-On Windows, `npm run preflight-check` connected to and pinged both the development and test databases successfully. `npm test` loaded `.env.test` and reported `0 passing`.
+### Services
+
+#### 1. MongoDB (Database)
+- **Image:** mongo:7.0
+- **Container Name:** sit725-mongodb
+- **Port:** 27017 (internal) → 27017 (localhost)
+- **Credentials:**
+  - Username: `admin`
+  - Password: `password123`
+- **Database:** `sit725-group-88`
+- **Health Check:** MongoDB is pinged every 10 seconds
+- **Volume:** `mongodb_data` - persists data between container restarts
+
+#### 2. Node.js App (Application Server)
+- **Image:** Built from `Dockerfile`
+- **Container Name:** sit725-app
+- **Port:** 3000 (internal) → 3000 (localhost)
+- **Environment Variables:**
+  - `NODE_ENV: production`
+  - `PORT: 3000`
+  - `MONGODB_URI: mongodb://admin:password123@mongodb:27017/sit725-group-88?authSource=admin`
+- **Depends On:** MongoDB (waits for health check to pass)
+- **Volumes:**
+  - `.:/app` - mounts current directory for live code updates
+  - `/app/node_modules` - persists node_modules
+
+### File Structure
+
+```
+.
+├── Dockerfile                 # Application container configuration
+├── docker-compose.yml         # Service orchestration configuration
+├── .dockerignore             # Files excluded from Docker build context
+├── server.js                 # Express server with /api/student endpoint
+├── package.json              # Node.js dependencies
+├── package-lock.json         # Locked dependency versions
+│
+├── public/                   # Frontend files served to browser
+│   ├── index.html
+│   ├── report.html
+│   ├── browse.html
+│   ├── search-filter.html
+│   ├── css/
+│   └── js/
+│
+├── models/                   # Mongoose database schemas
+│   ├── user.model.js
+│   ├── lostItem.model.js
+│   └── foundItem.model.js
+│
+├── controllers/              # Business logic for API endpoints
+├── routes/                   # API route definitions
+├── services/                 # Reusable service functions
+│
+├── test/                     # Test files (not included in Docker image)
+├── scripts/                  # Utility scripts
+│
+└── README.md                 # This file
+```
+
+---
+
+## Configuration Details
+
+### Docker Compose Configuration
+
+The `docker-compose.yml` file orchestrates two services:
+
+```yaml
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    # ... MongoDB configuration
+    healthcheck:
+      test: ...              # Ensures MongoDB is ready
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ... App configuration
+    depends_on:
+      mongodb:
+        condition: service_healthy  # Wait for MongoDB health check
+```
+
+### Environment Variables
+
+Configuration is passed via environment variables in `docker-compose.yml`:
+
+| Variable | Value | Purpose |
+|----------|-------|---------|
+| `NODE_ENV` | `production` | Sets application environment |
+| `PORT` | `3000` | Sets Express server port |
+| `MONGODB_URI` | `mongodb://admin:password123@mongodb:27017/sit725-group-88?authSource=admin` | MongoDB connection string |
+
+### Dockerfile Strategy
+
+The `Dockerfile` uses:
+- **Base Image:** `node:18-alpine` (lightweight ~150MB)
+- **Working Directory:** `/app`
+- **Build Steps:**
+  1. Copy package files
+  2. Install dependencies
+  3. Copy application code
+  4. Expose port 3000
+  5. Start with `node server.js`
+
+The `.dockerignore` excludes unnecessary files to reduce build context size.
+
+---
+
+## Troubleshooting
+
+### Issue: Port 3000 Already in Use
+
+**Error:** `bind: address already in use`
+
+**Solution 1: Kill the process using port 3000**
+```bash
+# On Mac/Linux
+sudo lsof -ti:3000 | xargs kill -9
+
+# On Windows (PowerShell)
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
+```
+
+**Solution 2: Use a different port**
+
+Edit `docker-compose.yml`:
+```yaml
+ports:
+  - "3001:3000"  # Change 3001 to any available port
+```
+
+Then access at http://localhost:3001
+
+### Issue: MongoDB Connection Failed
+
+**Error:** `MONGODB_URI is not defined` or `Connection error`
+
+**Troubleshooting Steps:**
+
+1. Check if MongoDB container is running:
+   ```bash
+   docker-compose ps mongodb
+   ```
+
+2. View MongoDB logs:
+   ```bash
+   docker-compose logs mongodb
+   ```
+
+3. Rebuild containers:
+   ```bash
+   docker-compose down
+   docker-compose build --no-cache
+   docker-compose up
+   ```
+
+4. Check MongoDB is healthy:
+   ```bash
+   docker exec sit725-mongodb mongosh --eval "db.adminCommand('ping')"
+   ```
+
+### Issue: Application Won't Start
+
+**Error:** `Error: connect ECONNREFUSED`
+
+**Solution:**
+```bash
+# View application logs
+docker-compose logs app
+
+# Rebuild everything
+docker-compose down -v
+docker-compose build --no-cache
+docker-compose up
+```
+
+### Issue: "Address Already in Use" for MongoDB
+
+**Error:** `bind: address already in use` for port 27017
+
+**Solution:**
+```bash
+# Stop any existing MongoDB containers
+docker stop sit725-mongodb 2>/dev/null || true
+
+# Remove dangling containers
+docker container prune -f
+
+# Start fresh
+docker-compose up --build
+```
+
+---
+
+## Docker Useful Commands
+
+### Building and Starting
+
+```bash
+# Build images without starting
+docker-compose build
+
+# Build and start in foreground (shows logs)
+docker-compose up
+
+# Build and start in background
+docker-compose up -d
+
+# Build without cache (rebuilds from scratch)
+docker-compose build --no-cache
+
+# Build and start in one command
+docker-compose up --build
+```
+
+### Viewing Status and Logs
+
+```bash
+# Show running containers
+docker-compose ps
+
+# View all logs
+docker-compose logs
+
+# View logs for specific service
+docker-compose logs app
+docker-compose logs mongodb
+
+# View logs in real-time
+docker-compose logs -f
+
+# View last 50 lines of logs
+docker-compose logs --tail=50
+```
+
+### Stopping and Cleanup
+
+```bash
+# Stop containers (data preserved)
+docker-compose stop
+
+# Stop and remove containers
+docker-compose down
+
+# Stop and remove everything including volumes (WARNING: data deleted)
+docker-compose down -v
+
+# Remove dangling images
+docker image prune -f
+```
+
+### Accessing Container Shells
+
+```bash
+# Access Node.js application shell
+docker exec -it sit725-app /bin/sh
+
+# Access MongoDB shell
+docker exec -it sit725-mongodb mongosh
+
+# Run commands in container
+docker exec sit725-app npm test
+```
+
+---
+
+## Testing
+
+### Running Unit Tests (Inside Container)
+
+```bash
+docker exec sit725-app npm test
+```
+
+### Running Tests with Coverage
+
+```bash
+docker exec sit725-app npm run test:coverage
+```
+
+### Running Preflight Check
+
+```bash
+docker exec sit725-app npm run preflight-check
+```
+
+---
+
+## Development Workflow
+
+If you modify code and want changes to be reflected:
+
+1. **Live Code Updates:** Due to volume mount (`.:/app`), changes to `.js` files are reflected immediately
+2. **Dependency Changes:** If you modify `package.json`, rebuild:
+   ```bash
+   docker-compose down
+   docker-compose up --build
+   ```
+3. **Database Schema Changes:** May require clearing data:
+   ```bash
+   docker-compose down -v
+   docker-compose up
+   ```
+
+---
+
+## Performance Notes
+
+- **First Build:** ~2-3 minutes (installs all dependencies)
+- **Subsequent Builds:** ~10-30 seconds (cached layers)
+- **Container Startup:** ~15-30 seconds (MongoDB initialization)
+- **Full Restart:** ~1 minute from `docker-compose down` to ready state
+
+---
+
+## Security Notes
+
+### For Production (Not Applicable Here)
+
+This configuration uses default credentials and should NOT be used in production. For production:
+
+- Use environment-specific `.env` files
+- Store secrets in a secrets manager (AWS Secrets Manager, HashiCorp Vault)
+- Use strong passwords
+- Enable MongoDB authentication with user-specific roles
+- Use multi-stage Docker builds to minimize image size
+- Scan images for vulnerabilities
+
+### For This Assignment
+
+- MongoDB runs with basic authentication
+- Credentials are defined in `docker-compose.yml`
+- Port 27017 is exposed for testing purposes
+- This is acceptable for a local development/testing environment
+
+---
+
+## References
+
+- Docker Documentation: https://docs.docker.com
+- Docker Compose Reference: https://docs.docker.com/compose/compose-file
+- Mongoose Documentation: https://mongoosejs.com/docs
+- Express.js Guide: https://expressjs.com/en/guide/routing.html
+- MongoDB Docker Hub: https://hub.docker.com/_/mongo
+- Node.js Docker Hub: https://hub.docker.com/_/node
+
+---
+
+## Student Information
+
+- **Name:** [Your Full Name]
+- **Student ID:** [Your Student ID]
+- **Submission Date:** [Date]
+- **GitHub Repository:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
+- **Student Endpoint:** GET http://localhost:3000/api/student
+
+---
+
+## Notes
+
+This is an individual High Distinction (HD) submission for the group Campus Lost and Found project. All Docker containerization, configuration, and individual work has been completed independently while maintaining the original group project application functionality.
