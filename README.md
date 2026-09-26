@@ -275,8 +275,9 @@ The `.env` file is required to run the application and is provided in the OnTrac
 
 **Steps:**
 1. Download the `.env` file from the OnTrack submission
-2. Place it in the project root directory
-3. Run `docker-compose up`
+2. Some browsers remove the leading dot when downloading, so the file may be saved as `env`. If so, rename it to `.env`
+3. Place it in the project root directory
+4. Run `docker-compose up`
 
 ---
 
