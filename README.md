@@ -46,9 +46,20 @@ git clone https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found.git
 cd SIT725-Group-88-Campus-Lost-and-Found
 ```
 
-#### Step 2: Clone Repository
-**Download and Copy .env file:** 
-Download link provided in the OnTrack submission and place in the project root directory.
+#### Step 2: Create the .env File
+
+Copy the provided `.env.example` to `.env` in the project root:
+
+```bash
+# macOS / Linux / Git Bash
+cp .env.example .env
+
+# Windows (Command Prompt)
+copy .env.example .env
+
+# Windows (PowerShell)
+Copy-Item .env.example .env
+```
 
 #### Step 3: Start Docker Containers
 
@@ -158,7 +169,8 @@ project/
 │       ├── browse.js         # Display items
 │       └── report-validation.js  # Form validation
 │
-└── .env                      # Environment variables
+├── .env.example              # Environment variable template (copy to .env)
+└── .env                      # Environment variables (created from .env.example, not committed)
 ```
 
 ---
@@ -271,13 +283,16 @@ curl http://localhost:3000/api/student
 
 ## Environment Variables
 
-The `.env` file is required to run the application and is provided in the OnTrack submission. 
+The application reads its settings from a `.env` file in the project root. This file is not committed to Git, so create it from the template:
 
 **Steps:**
-1. Download the `.env` file from the OnTrack submission
-2. Some browsers remove the leading dot when downloading, so the file may be saved as `env`. If so, rename it to `.env`
-3. Place it in the project root directory
-4. Run `docker-compose up`
+1. In the project root, copy `.env.example` to `.env` (`cp .env.example .env`, or `copy .env.example .env` on Windows)
+2. Run `docker-compose up --build`
+
+| Variable | Description |
+|----------|-------------|
+| `PORT` | Port the Express server listens on (default `3000`) |
+| `MONGODB_URI` | MongoDB connection string |
 
 ---
 
