@@ -232,7 +232,7 @@ project/
 Create a new report
 
 **Required Fields:** type, title, category, date, description, campus, building  
-**Optional Fields:** room, handoverMethod, photos (up to 3 files)
+**Optional Fields:** room, handoverMethod, photos
 
 Send JSON (no photos) or `multipart/form-data` (with photos). The Create Report page uses `multipart/form-data`.
 
