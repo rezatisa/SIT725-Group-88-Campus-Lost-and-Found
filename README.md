@@ -70,40 +70,52 @@ copy .env.example .env
 Copy-Item .env.example .env
 ```
 
+Both options contain the values the Docker setup needs.
+
 #### Step 3: Start Docker Containers
 
+> **Before you start:** make sure **Docker Desktop is open and running** (bottom-left shows **"Engine running"**). If it is not running, the command below fails with an error like `error during connect` or `Cannot connect to the Docker daemon`.
+
+**Run in:** the project folder from Step 1 (the folder that contains `docker-compose.yml`).
+
 ```bash
-docker-compose up --build
+docker-compose up --build -d
 ```
 
-Expected output:
-```
-✓ Connected to MongoDB
-✓ Server running at http://localhost:3000
-```
+Don't forget **`-d`**. It runs Docker in the background, so after a short wait the terminal shows the prompt again and you can keep typing.
 
 #### Step 4: Load Sample Data
 
-The database starts empty, so the Browse page shows **"No active reports available."** until data is added. Leave the first terminal running, open a **second terminal** in the project folder, and run:
+In the **same terminal** as Step 3, run:
 
 ```bash
 docker-compose exec app node scripts/seed.js
 ```
 
-Expected output:
+You should see:
 ```
-✓ Connected to MongoDB
 ✓ Added 4 found and 3 lost sample reports.
 ```
 
-Each sample report comes with an illustration from `public/images/samples/`, so the cards show a picture instead of "No photo". The script only adds sample reports when the database is empty, so running it again does not create duplicates. You can also skip this step and create your own report from **Create Report** (see [Testing the Application](#testing-the-application)).
+This adds 7 sample reports with pictures. If the database already has data, nothing is added.
+
+> **Terminal stuck showing logs and you can't type?** You started Docker without `-d`. Press **Ctrl + C**, run `docker-compose up -d`, then run the seed command again.
 
 #### Step 5: Access Application
 
-Open your browser:
-- **Frontend:** http://localhost:3000
-- **API:** http://localhost:3000/api/items
-- **Student Info:** http://localhost:3000/api/student
+Open your browser and use these pages (they are connected to MongoDB):
+
+| Menu | URL | What it does |
+|------|-----|--------------|
+| **Main** | http://localhost:3000/browse.html | Shows all reports from the database |
+| **Create Report** | http://localhost:3000/report.html | Submits a new lost/found report with photos |
+| **Item Detail** | Click a card on **Main** | Shows the full report and its photos |
+
+> The other menu items (**Login**, **Search & Filter**, **My Reports**) are UI previews only and are not connected to the backend yet.
+
+API endpoints:
+- **All reports:** http://localhost:3000/api/items
+- **Student info:** http://localhost:3000/api/student
 
 ---
 
@@ -348,7 +360,7 @@ The application reads its settings from a `.env` file in the project root. This 
 
 **Steps:**
 1. Place the downloaded `.env` in the project root (rename `env` to `.env` if needed), **or** copy `.env.example` to `.env` (`cp .env.example .env`, or `copy .env.example .env` on Windows)
-2. Run `docker-compose up --build`
+2. Run `docker-compose up --build -d`
 
 Inside Docker, the database host is the `mongodb` service name, not `localhost`.
 
@@ -408,8 +420,7 @@ docker-compose down -v
 To clear all data and start again with the sample reports:
 ```bash
 docker-compose down -v
-docker-compose up --build
-# in a second terminal
+docker-compose up --build -d
 docker-compose exec app node scripts/seed.js
 ```
 
