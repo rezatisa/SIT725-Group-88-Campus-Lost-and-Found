@@ -16,9 +16,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Import routes
 const itemRoutes = require("./routes/item.routes");
+const photoRoutes = require("./routes/photo.routes");
 
 // Use routes
 app.use("/api/items", itemRoutes);
+app.use("/api/photos", photoRoutes);
 
 // Student endpoint
 app.get("/api/student", (req, res) => {

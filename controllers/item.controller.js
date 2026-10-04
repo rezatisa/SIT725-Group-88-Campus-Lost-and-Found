@@ -1,5 +1,6 @@
 const LostItem = require("../models/lostItem.model");
 const FoundItem = require("../models/foundItem.model");
+const Photo = require("../models/photo.model");
 const mongoose = require("mongoose");
 
 // Get all items
@@ -39,7 +40,8 @@ const getAllItems = async (req, res) => {
 // Create item
 const createItem = async (req, res) => {
   try {
-    const { type, title, category, date, description, campus, building, room, handoverMethod } = req.body;
+    // Works for JSON requests and for multipart/form-data (with photos).
+    const { type, title, category, date, description, campus, building, room, handoverMethod } = req.body || {};
 
     if (!type || !title || !category || !date || !description || !campus || !building) {
       return res.status(400).json({
@@ -60,6 +62,20 @@ const createItem = async (req, res) => {
       campusLocation: `${campus}${building ? " - " + building : ""}${room ? ", " + room : ""}`,
       photos: [],
     };
+
+    // Save uploaded photos (if any) in MongoDB and keep their URLs on the report.
+    const files = req.files || [];
+    if (files.length > 0) {
+      const savedPhotos = await Photo.insertMany(
+        files.map((file) => ({
+          data: file.buffer,
+          contentType: file.mimetype,
+          originalName: file.originalname,
+          size: file.size,
+        })),
+      );
+      itemData.photos = savedPhotos.map((photo) => `/api/photos/${photo._id}`);
+    }
 
     let newItem;
     if (type === "lost") {
@@ -89,6 +105,7 @@ const createItem = async (req, res) => {
         date: type === "lost" ? savedItem.lostAt : savedItem.foundAt,
         location: savedItem.campusLocation,
         status: savedItem.status,
+        photos: savedItem.photos,
       },
     });
   } catch (error) {

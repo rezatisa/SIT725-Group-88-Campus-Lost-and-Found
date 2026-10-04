@@ -65,14 +65,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 handoverMethod: document.querySelector('input[name="handoverMethod"]:checked')?.value || null
             };
 
-            console.log('Report submission data:', reportData);
-            console.log('About to fetch...');
+            const photoInput = document.getElementById('item-photos');
+            const photos = photoInput ? Array.from(photoInput.files) : [];
+
+            if (photos.length > 3) {
+                alert('You can upload up to 3 photos.');
+                return;
+            }
+
+            const tooLarge = photos.find((photo) => photo.size > 5 * 1024 * 1024);
+            if (tooLarge) {
+                alert(`"${tooLarge.name}" is larger than 5 MB.`);
+                return;
+            }
+
+            // Send the form as multipart/form-data so the photos are uploaded too.
+            const formData = new FormData();
+            Object.entries(reportData).forEach(([key, value]) => {
+                if (value !== null && value !== undefined) {
+                    formData.append(key, value);
+                }
+            });
+            photos.forEach((photo) => formData.append('photos', photo));
+
+            console.log('Report submission data:', reportData, `${photos.length} photo(s)`);
             fetch('/api/items', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(reportData)
+                body: formData
             })
                 .then(response => {
                     if (!response.ok) {

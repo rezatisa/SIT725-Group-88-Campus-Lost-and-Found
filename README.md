@@ -12,7 +12,7 @@
 A web application for reporting and browsing lost and found items on campus. Users can report lost or found items and browse a centralized database of all reports.
 
 Note: This application has core functionality working (create report, display reports). 
-Some features are still in development (search, photo upload, authentication).
+Some features are still in development (search, authentication).
 
 
 **Github repository:** https://github.com/rezatisa/SIT725-Group-88-Campus-Lost-and-Found
@@ -34,10 +34,31 @@ Some features are still in development (search, photo upload, authentication).
 
 ### Prerequisites
 
-- Docker Desktop installed
+- Docker Desktop installed **and running** (the whale icon shows "Engine running")
 - Docker Compose installed (included with Docker Desktop)
+- Git installed (for `git clone`)
 
-### Quick Start (4 Steps)
+### Where to Run the Commands
+
+All commands below are typed in a terminal:
+
+| Operating system | Terminal to use | How to open it |
+|------------------|-----------------|----------------|
+| Windows | **PowerShell** (recommended) or Command Prompt | Press `Win`, type `PowerShell`, press Enter |
+| macOS | **Terminal** | Press `Cmd + Space`, type `Terminal`, press Enter |
+| Linux | **Terminal** | Press `Ctrl + Alt + T` |
+
+You can also use the terminal built into VS Code (**Terminal → New Terminal**), which opens in the project folder automatically.
+
+Commands in Steps 2–4 must be run **inside the project folder** (the folder that contains `docker-compose.yml`). After Step 1 you are already there. If you open a new terminal later, go back to it first, for example:
+
+```bash
+cd path/to/SIT725-Group-88-Campus-Lost-and-Found
+```
+
+> On newer Docker versions you can type `docker compose` (with a space) instead of `docker-compose`. Both work the same way.
+
+### Quick Start (5 Steps)
 
 #### Step 1: Clone Repository
 
@@ -48,7 +69,11 @@ cd SIT725-Group-88-Campus-Lost-and-Found
 
 #### Step 2: Create the .env File
 
-Copy the provided `.env.example` to `.env` in the project root:
+Use **one** of these options:
+
+**Option A:** Download the `.env` file from the link in the OnTrack submission and place it in the project root. Some browsers save it as `env` (without the dot). If so, rename it to `.env`.
+
+**Option B:** Copy the provided `.env.example` to `.env` in the project root:
 
 ```bash
 # macOS / Linux / Git Bash
@@ -60,6 +85,8 @@ copy .env.example .env
 # Windows (PowerShell)
 Copy-Item .env.example .env
 ```
+
+Both options contain the values the Docker setup needs.
 
 #### Step 3: Start Docker Containers
 
@@ -73,7 +100,23 @@ Expected output:
 ✓ Server running at http://localhost:3000
 ```
 
-#### Step 4: Access Application
+#### Step 4: Load Sample Data
+
+The database starts empty, so the Browse page shows **"No active reports available."** until data is added. Leave the first terminal running. Open a **second terminal** (a new PowerShell / Terminal window, or **+** in VS Code), go to the project folder with `cd`, and run:
+
+```bash
+docker-compose exec app node scripts/seed.js
+```
+
+Expected output:
+```
+✓ Connected to MongoDB
+✓ Added 4 found and 3 lost sample reports.
+```
+
+Each sample report comes with an illustration from `public/images/samples/`, so the cards show a picture instead of "No photo". The script only adds sample reports when the database is empty, so running it again does not create duplicates. You can also skip this step and create your own report from **Create Report** (see [Testing the Application](#testing-the-application)).
+
+#### Step 5: Access Application
 
 Open your browser:
 - **Frontend:** http://localhost:3000
@@ -88,13 +131,16 @@ Open your browser:
 
 1. Go to http://localhost:3000
 2. Click **"Create Report"**
-3. Fill form and click **Submit Report**
-4. You should see: **"Report submitted successfully!"**
+3. Fill the form
+4. (Optional) Under **Item Photos**, click **File** and choose up to 3 photos (JPEG, PNG or WebP, max 5 MB each)
+5. Click **Submit Report**
+6. You should see: **"Report submitted successfully!"**
 
 ### 2. View Reports
 
 1. Click **"Main"** or refresh http://localhost:3000/browse.html
-2. Your report should appear as a card on the browse page
+2. Your report should appear as a card on the browse page, showing the first uploaded photo
+3. Click the card to open **Item Detail** and see all uploaded photos
 
 ### 3. Verify API Endpoints
 
@@ -146,18 +192,27 @@ project/
 ├── server.js                 # Express server with MVC
 ├── package.json              # Dependencies
 │
+├── scripts/
+│   └── seed.js               # Loads sample reports into MongoDB
+│
 ├── controllers/
-│   └── item.controller.js    # Business logic
+│   ├── item.controller.js    # Business logic
+│   └── photo.controller.js   # Serves uploaded photos
+├── middleware/
+│   └── photo-upload.middleware.js  # Multer upload limits (3 photos, 5 MB, JPEG/PNG/WebP)
 ├── routes/
-│   └── item.routes.js        # API endpoints
+│   ├── item.routes.js        # Item API endpoints
+│   └── photo.routes.js       # Photo API endpoint
 ├── models/                   # Database schemas
 │   ├── lostItem.model.js     # Lost item schema
 │   ├── foundItem.model.js    # Found item schema
+│   ├── photo.model.js        # Uploaded photo schema
 │   └── user.model.js         # User schema (future)
 │
 ├── public/                   # Frontend (Views)
 │   ├── index.html            # Home page
 │   ├── report.html           # Report creation page
+│   ├── images/samples/       # Illustrations used by the sample reports
 │   ├── browse.html           # Browse items page
 │   ├── css/                  # Stylesheets
 │   │   ├── style.css         # Main styles
@@ -183,7 +238,20 @@ project/
 Create a new report
 
 **Required Fields:** type, title, category, date, description, campus, building  
-**Optional Fields:** room, handoverMethod
+**Optional Fields:** room, handoverMethod, photos (up to 3 files)
+
+Send JSON (no photos) or `multipart/form-data` (with photos). The Create Report page uses `multipart/form-data`.
+
+**With photos:**
+```bash
+curl -X POST http://localhost:3000/api/items \
+  -F type=found -F title="Blue Bottle" -F category="Other" \
+  -F date=2026-10-01 -F description="Blue metal bottle" \
+  -F campus="Melbourne Burwood" -F building="LC" \
+  -F photos=@bottle.jpg
+```
+
+**Without photos (JSON):**
 
 ```bash
 curl -X POST http://localhost:3000/api/items \
@@ -243,6 +311,17 @@ curl http://localhost:3000/api/items
 ```
 ---
 
+### GET /api/photos/:id
+Returns an uploaded photo (image bytes). Report photo URLs look like `/api/photos/<id>` and are used directly in `<img src="...">`.
+
+```bash
+curl -o photo.jpg http://localhost:3000/api/photos/<photo-id>
+```
+
+**Errors:** `404` if the photo does not exist.
+
+---
+
 ### GET /api/student
 Get student identification (HD submission)
 
@@ -283,16 +362,18 @@ curl http://localhost:3000/api/student
 
 ## Environment Variables
 
-The application reads its settings from a `.env` file in the project root. This file is not committed to Git, so create it from the template:
+The application reads its settings from a `.env` file in the project root. This file is not committed to Git. Either download it from the OnTrack submission link, or create it from the template:
 
 **Steps:**
-1. In the project root, copy `.env.example` to `.env` (`cp .env.example .env`, or `copy .env.example .env` on Windows)
+1. Place the downloaded `.env` in the project root (rename `env` to `.env` if needed), **or** copy `.env.example` to `.env` (`cp .env.example .env`, or `copy .env.example .env` on Windows)
 2. Run `docker-compose up --build`
+
+Inside Docker, the database host is the `mongodb` service name, not `localhost`.
 
 | Variable | Description |
 |----------|-------------|
 | `PORT` | Port the Express server listens on (default `3000`) |
-| `MONGODB_URI` | MongoDB connection string |
+| `MONGODB_URI` | MongoDB connection string (host `mongodb` when running in Docker) |
 
 ---
 
@@ -330,6 +411,7 @@ docker-compose down -v
 
 ✅ **Create Reports** - Users can report lost or found items  
 ✅ **Browse Reports** - All reports displayed on main page  
+✅ **Photo Upload** - Up to 3 photos per report (JPEG, PNG, WebP, max 5 MB each), stored in MongoDB  
 ✅ **Database Integration** - MongoDB stores all data  
 ✅ **Docker Deployment** - Containerized with Docker Compose  
 ✅ **MVC Architecture** - Clean separation of concerns  
@@ -341,10 +423,12 @@ docker-compose down -v
 ## Development Notes
 
 ### Database Reset
-To clear all data:
+To clear all data and start again with the sample reports:
 ```bash
 docker-compose down -v
 docker-compose up --build
+# in a second terminal
+docker-compose exec app node scripts/seed.js
 ```
 
 ### Debugging
