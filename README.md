@@ -126,7 +126,7 @@ API endpoints:
 1. Go to http://localhost:3000
 2. Click **"Create Report"**
 3. Fill the form
-4. (Optional) Under **Item Photos**, click **File** and choose up to 3 photos (JPEG, PNG or WebP, max 5 MB each)
+4. (Optional) Under **Item Photos**, click **File** and choose  3 photos
 5. Click **Submit Report**
 6. You should see: **"Report submitted successfully!"**
 
