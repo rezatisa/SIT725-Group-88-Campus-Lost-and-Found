@@ -40,23 +40,7 @@ Some features are still in development (search, authentication).
 
 ### Where to Run the Commands
 
-All commands below are typed in a terminal:
-
-| Operating system | Terminal to use | How to open it |
-|------------------|-----------------|----------------|
-| Windows | **PowerShell** (recommended) or Command Prompt | Press `Win`, type `PowerShell`, press Enter |
-| macOS | **Terminal** | Press `Cmd + Space`, type `Terminal`, press Enter |
-| Linux | **Terminal** | Press `Ctrl + Alt + T` |
-
-You can also use the terminal built into VS Code (**Terminal → New Terminal**), which opens in the project folder automatically.
-
-Commands in Steps 2–4 must be run **inside the project folder** (the folder that contains `docker-compose.yml`). After Step 1 you are already there. If you open a new terminal later, go back to it first, for example:
-
-```bash
-cd path/to/SIT725-Group-88-Campus-Lost-and-Found
-```
-
-> On newer Docker versions you can type `docker compose` (with a space) instead of `docker-compose`. Both work the same way.
+Run all commands in a terminal (Windows: **PowerShell**, macOS/Linux: **Terminal**, or the VS Code terminal) from the project folder.
 
 ### Quick Start (5 Steps)
 
@@ -86,8 +70,6 @@ copy .env.example .env
 Copy-Item .env.example .env
 ```
 
-Both options contain the values the Docker setup needs.
-
 #### Step 3: Start Docker Containers
 
 ```bash
@@ -102,7 +84,7 @@ Expected output:
 
 #### Step 4: Load Sample Data
 
-The database starts empty, so the Browse page shows **"No active reports available."** until data is added. Leave the first terminal running. Open a **second terminal** (a new PowerShell / Terminal window, or **+** in VS Code), go to the project folder with `cd`, and run:
+The database starts empty, so the Browse page shows **"No active reports available."** until data is added. Leave the first terminal running, open a **second terminal** in the project folder, and run:
 
 ```bash
 docker-compose exec app node scripts/seed.js
